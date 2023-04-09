@@ -1,0 +1,107 @@
+---
+import Layout from "@layouts/layout.astro";
+import Card from "@components/card.astro";
+import Pagination from "@components/pagination.astro";
+
+import { getCollection } from "astro:content";
+import { compareDesc } from "date-fns";
+
+//getStaticPathsでパスを生成する
+export async function getStaticPaths({ paginate }) {
+  const blogPosts = await getCollection("blog");
+
+  // 降順にソート
+  const sortedBlogPosts = blogPosts.sort((a, b) =>
+    compareDesc(a.data.pubDate, b.data.pubDate)
+  );
+
+  // Astroの関数 paginateを使って1Pに表示する記事数を指定
+  return paginate(sortedBlogPosts, { pageSize: 6 });
+}
+/** propsからのpageの中身（ props.padge.data ）
+  {
+	"data": [
+		{
+			"id": "reduceメソッドの使い方.md",
+			...
+			"data": {
+				"title": "reduceメソッドの使い方",
+				...
+			}
+		},
+		{
+			"id": "PythonでHTMLとCSSを扱う方法.md",
+			...
+			"data": {
+				"title": "PythonでHTMLとCSSを扱う方法",
+				...
+			}
+		},
+		{
+			"id": "unist-util-visitを使ってimgを走査する方法.md",
+			...
+			"data": {
+				"title": "unist-util-visitを使ってimgを走査する方法",
+				...
+			}
+		},
+		{
+			"id": "JavaScriptでプログラミング初心者が最初に覚えるべきこと.md",
+			...
+			"data": {
+				"title": "JavaScriptでプログラミング初心者が最初に覚えるべきこと",
+				...
+			}
+		},
+		{
+			"id": "Pythonでスクレイピングを行う.md",
+			...
+			"data": {
+				"title": "Pythonでスクレイピングを行う",
+				...
+			}
+		},
+		{
+			"id": "Pythonで正規表現を使う.md",
+			"data": {
+				"title": "Pythonで正規表現を使う",
+				...
+			}
+		}
+	],
+	"start": 0,
+	"end": 5,
+	"size": 6,
+	"total": 13,
+	"currentPage": 1,
+	"lastPage": 3,
+	"url": {
+		"current": "/blog/1",
+		"next": "/blog/2"
+	}
+}
+ */
+
+const {
+  page: {
+    data,
+    url: { prev, next },
+  },
+} = Astro.props;
+---
+
+<Layout pageTitle="Blog Posts" description="ブログの記事一覧">
+  <h1>Blog Posts</h1>
+  <div class="grid">
+    {
+      data.map((post) => {
+        const {
+          slug,
+          data: { image, title },
+        } = post;
+        return <Card url={`/blog/${slug}`} src={image} title={title} />;
+      })
+    }
+  </div>
+  <Pagination prev={prev} next={next} />
+</Layout>
