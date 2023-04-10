@@ -79,7 +79,9 @@ const convertHtml = imgToPicture(html);
             ).categoryName;
 
             return (
-              <a href={`/blog/category/${categorySlug}`}>{categoryName}</a>
+              <a rel="prefetch" href={`/blog/category/${categorySlug}`}>
+                {categoryName}
+              </a>
             );
           })
         }
