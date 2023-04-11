@@ -1,7 +1,7 @@
 export const siteMeta = {
   siteTitle: "Tech Flow.",
   siteDesc: "Tech Flowの技術ブログサイトです",
-  siteUrl: "https://demo-astro-ebicom-mwpu.vercel.app/",
+  siteUrl: "https://demo-astro-ebicom.vercel.app/",
   siteLocale: "ja_JP",
   siteType: "website",
   siteIcon: "/favicon.png",
